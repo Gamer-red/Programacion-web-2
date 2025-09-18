@@ -1,0 +1,551 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Game Paradise 🎮 - Tu Marketplace Gaming</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg: #0a0b0f;
+      --bg-card: #12131a;
+      --bg-secondary: #1a1b24;
+      --muted: #9aa3af;
+      --txt: #f0f0f0;
+      --primary: #ff2d55;
+      --accent: #ff5c93;
+      --success: #00d4aa;
+      --warning: #ffb800;
+      --danger: #ff1e1e;
+      --border: rgba(255,255,255,.08);
+      --grad: radial-gradient(1200px 600px at 10% 10%, rgba(255,45,85,.15), transparent 60%),
+              radial-gradient(900px 500px at 80% 0%, rgba(255,92,147,.12), transparent 60%),
+              radial-gradient(800px 500px at 70% 90%, rgba(255,45,85,.12), transparent 60%);
+    }
+
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:Inter,system-ui,Roboto,sans-serif;
+      background: var(--bg);
+      color: var(--txt);
+      line-height:1.6;
+    }
+    .container{max-width:1200px;margin:0 auto;padding:0 20px}
+
+    /* Navbar mejorado */
+    .nav{
+      position:sticky;top:0;z-index:50;
+      backdrop-filter: blur(12px);
+      background: rgba(10,11,15,.85);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav__inner{
+      display:flex;align-items:center;justify-content:space-between;height:70px;gap:2rem;
+    }
+    .brand{
+      display:flex;align-items:center;gap:.7rem;font-weight:800;
+      text-decoration:none;color:var(--primary);font-size:1.4rem;
+    }
+    .search-box{
+      flex:1;max-width:400px;position:relative;
+    }
+    .search-box input{
+      width:100%;padding:.7rem 1rem;border-radius:12px;
+      border:1px solid var(--border);background:var(--bg-card);
+      color:var(--txt);font-size:.9rem;
+    }
+    .search-box input:focus{outline:none;border-color:var(--primary)}
+    
+    .nav__links{display:flex;gap:1.5rem;align-items:center}
+    .nav__links a{
+      color:var(--muted);text-decoration:none;font-weight:500;
+      padding:.5rem .8rem;border-radius:8px;transition:.2s;
+    }
+    .nav__links a:hover{color:var(--primary);background:rgba(255,45,85,.1)}
+    .user-points{
+      display:flex;align-items:center;gap:.4rem;
+      background:var(--bg-secondary);padding:.4rem .8rem;border-radius:20px;
+      font-size:.85rem;color:var(--success);font-weight:600;
+    }
+
+    /* Botones mejorados */
+    .btn{
+      display:inline-flex;align-items:center;justify-content:center;gap:.5rem;
+      padding:.7rem 1.2rem;border-radius:12px;text-decoration:none;
+      font-weight:600;cursor:pointer;border:0;transition:.2s;
+      font-size:.9rem;
+    }
+    .btn:hover{transform:translateY(-1px)}
+    .btn--primary{background:var(--primary);color:#fff}
+    .btn--primary:hover{background:#e8254a}
+    .btn--ghost{background:transparent;border:1px solid var(--border);color:var(--txt)}
+    .btn--ghost:hover{background:var(--bg-secondary)}
+    .btn--success{background:var(--success);color:#000}
+
+    /* Hero mejorado */
+    .hero{
+      position:relative;padding:4rem 0;overflow:hidden;text-align:center;
+      min-height:60vh;display:flex;align-items:center;
+    }
+    .hero__bg{position:absolute;inset:0;background:var(--grad);opacity:.9}
+    .hero__content{position:relative;z-index:2}
+    .hero h1{font-size:3.5rem;margin:0;color:var(--primary);margin-bottom:1rem}
+    .hero p{color:var(--muted);max-width:650px;margin:0 auto 2rem;font-size:1.1rem}
+    .hero__cta{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
+    .hero__stats{
+      display:flex;gap:2rem;justify-content:center;margin-top:2rem;
+      flex-wrap:wrap;
+    }
+    .stat{text-align:center}
+    .stat__number{font-size:1.8rem;font-weight:800;color:var(--primary)}
+    .stat__label{font-size:.85rem;color:var(--muted)}
+
+    /* Filtros */
+    .filters{
+      display:flex;gap:1rem;margin-bottom:2rem;flex-wrap:wrap;
+      justify-content:center;
+    }
+    .filter-btn{
+      padding:.6rem 1rem;border-radius:20px;border:1px solid var(--border);
+      background:transparent;color:var(--muted);cursor:pointer;
+      transition:.2s;font-size:.85rem;
+    }
+    .filter-btn:hover, .filter-btn.active{
+      background:var(--primary);color:#fff;border-color:var(--primary);
+    }
+
+    /* Grid de productos mejorado */
+    .section{padding:4rem 0}
+    .section__head{margin-bottom:2rem;text-align:center}
+    .section__head h2{font-size:2.2rem;margin-bottom:.5rem}
+    .section__head p{color:var(--muted);max-width:600px;margin:0 auto}
+    
+    .grid{
+      display:grid;gap:1.8rem;
+      grid-template-columns:repeat(auto-fill,minmax(280px,1fr))
+    }
+    .card{
+      background:var(--bg-card);border-radius:16px;overflow:hidden;
+      border:1px solid var(--border);transition:.3s;position:relative;
+    }
+    .card:hover{transform:translateY(-6px);border-color:var(--primary)}
+    .card__badge{
+      position:absolute;top:.8rem;right:.8rem;z-index:2;
+      background:var(--primary);color:#fff;padding:.3rem .6rem;
+      border-radius:12px;font-size:.75rem;font-weight:600;
+    }
+    .card img{width:100%;height:200px;object-fit:cover}
+    .card__body{padding:1.2rem}
+    .card__title{font-weight:700;margin:0 0 .5rem;color:#fff;font-size:1.1rem}
+    .card__platform{
+      font-size:.8rem;color:var(--accent);font-weight:500;margin-bottom:.5rem;
+    }
+    .card__rating{
+      display:flex;align-items:center;gap:.3rem;margin:.5rem 0;
+    }
+    .stars{color:var(--warning)}
+    .card__price{
+      display:flex;justify-content:space-between;align-items:center;
+      margin:1rem 0;
+    }
+    .price{color:var(--primary);font-weight:700;font-size:1.1rem}
+    .price--old{color:var(--muted);text-decoration:line-through;font-size:.9rem}
+    .card__actions{display:flex;gap:.5rem}
+
+    /* Carrito mejorado */
+    .cart{
+      background:var(--bg-card);padding:1.5rem;border-radius:16px;
+      border:1px solid var(--border);margin-top:2rem;
+    }
+    .cart h3{margin-top:0;color:var(--primary);display:flex;align-items:center;gap:.5rem}
+    .cart-item{
+      display:flex;justify-content:space-between;align-items:center;
+      padding:1rem;margin:.5rem 0;background:var(--bg-secondary);border-radius:12px;
+    }
+    .cart-item img{width:60px;height:60px;object-fit:cover;border-radius:8px}
+    .cart-item__info{flex:1;margin-left:1rem}
+    .cart-item__title{font-weight:600;margin:0}
+    .cart-item__price{color:var(--primary);font-weight:600}
+    .cart-total{
+      border-top:1px solid var(--border);padding-top:1rem;margin-top:1rem;
+      text-align:right;
+    }
+
+    /* Perfil con gamificación */
+    .profile{
+      background:var(--bg-card);padding:2rem;border-radius:16px;
+      border:1px solid var(--border);
+    }
+    .profile__header{
+      display:flex;gap:2rem;align-items:center;margin-bottom:2rem;
+      flex-wrap:wrap;
+    }
+    .profile__avatar{
+      width:80px;height:80px;border-radius:50%;
+      background:var(--primary);display:flex;align-items:center;
+      justify-content:center;font-size:2rem;font-weight:800;
+    }
+    .profile__info h3{margin:0;font-size:1.4rem}
+    .profile__level{
+      background:linear-gradient(135deg,var(--primary),var(--accent));
+      padding:.3rem .8rem;border-radius:20px;font-size:.85rem;
+      font-weight:600;display:inline-block;margin-top:.5rem;
+    }
+
+    .achievements{margin-top:2rem}
+    .badges{display:flex;gap:1rem;flex-wrap:wrap;margin-top:1rem}
+    .badge{
+      background:var(--bg-secondary);padding:.8rem;border-radius:12px;
+      text-align:center;min-width:100px;border:1px solid var(--border);
+    }
+    .badge__icon{font-size:1.5rem;margin-bottom:.5rem}
+    .badge__title{font-size:.8rem;font-weight:600}
+
+    /* Recomendaciones */
+    .recommendations{
+      background:var(--bg-secondary);padding:2rem;border-radius:16px;
+      margin-top:2rem;border:1px solid var(--border);
+    }
+    .recommendations h3{
+      color:var(--accent);margin-top:0;display:flex;align-items:center;gap:.5rem;
+    }
+
+    /* Footer mejorado */
+    .footer{
+      margin-top:4rem;padding:2rem 0;text-align:center;
+      color:var(--muted);border-top:1px solid var(--border);
+      background:var(--bg-secondary);
+    }
+    .footer__content{
+      display:grid;gap:2rem;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+      margin-bottom:2rem;text-align:left;
+    }
+    .footer__section h4{color:var(--primary);margin-bottom:1rem}
+    .footer__section a{color:var(--muted);text-decoration:none;display:block;margin:.3rem 0}
+    .footer__section a:hover{color:var(--primary)}
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .hero h1{font-size:2.5rem}
+      .nav__inner{flex-wrap:wrap;height:auto;padding:1rem 0}
+      .search-box{order:3;flex-basis:100%;margin-top:1rem}
+      .hero__stats{flex-direction:column;gap:1rem}
+      .grid{grid-template-columns:repeat(auto-fill,minmax(250px,1fr))}
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar mejorado -->
+  <header class="nav">
+    <div class="nav__inner container">
+      <a class="brand" href="#">🎮 Game Paradise</a>
+      <div class="search-box">
+        <input type="text" placeholder="Buscar juegos, consolas, accesorios..." id="searchInput">
+      </div>
+      <nav class="nav__links">
+        <a href="#catalogo">Catálogo</a>
+        <a href="#carrito">🛒 Carrito (1)</a>
+        <div class="user-points">⭐ 2,450 puntos</div>
+        <a href="#perfil">Mi Perfil</a>
+      </nav>
+      <div>
+        <button class="btn btn--ghost">Ingresar</button>
+        <button class="btn btn--primary">Registrarse</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero mejorado -->
+  <section class="hero">
+    <div class="hero__bg"></div>
+    <div class="container hero__content">
+      <h1>Bienvenido a Game Paradise</h1>
+      <p>El marketplace gaming más completo de México. Descubre los mejores juegos, consolas y accesorios con recompensas exclusivas por cada compra.</p>
+      <div class="hero__cta">
+        <a href="#catalogo" class="btn btn--primary">🎮 Explorar Catálogo</a>
+        <a href="#perfil" class="btn btn--ghost">👤 Mi Cuenta</a>
+      </div>
+      <div class="hero__stats">
+        <div class="stat">
+          <div class="stat__number">15,000+</div>
+          <div class="stat__label">Juegos disponibles</div>
+        </div>
+        <div class="stat">
+          <div class="stat__number">50,000+</div>
+          <div class="stat__label">Gamers activos</div>
+        </div>
+        <div class="stat">
+          <div class="stat__number">24/7</div>
+          <div class="stat__label">Soporte técnico</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Catálogo mejorado -->
+  <section id="catalogo" class="section container">
+    <div class="section__head">
+      <h2>Catálogo de Productos</h2>
+      <p>Encuentra los mejores títulos clasificados por plataforma y con reseñas de la comunidad</p>
+    </div>
+    
+    <!-- Filtros -->
+    <div class="filters">
+      <button class="filter-btn active">Todos</button>
+      <button class="filter-btn">Nintendo Switch</button>
+      <button class="filter-btn">PlayStation 5</button>
+      <button class="filter-btn">Xbox Series</button>
+      <button class="filter-btn">PC</button>
+      <button class="filter-btn">Ofertas</button>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <div class="card__badge">Más vendido</div>
+        <img src="https://tse4.mm.bing.net/th/id/OIP.Z52BIGCQi2mFHam42kxmpQHaEK?cb=ucfimg2ucfimg=1&rs=1&pid=ImgDetMain&o=7&rm=3" alt="Mario Odyssey">
+        <div class="card__body">
+          <div class="card__platform">Nintendo Switch</div>
+          <h3 class="card__title">Super Mario Odyssey</h3>
+          <div class="card__rating">
+            <span class="stars">⭐⭐⭐⭐⭐</span>
+            <span>(4.8) 2,341 reseñas</span>
+          </div>
+          <div class="card__price">
+            <div>
+              <div class="price">$1,300 MXN</div>
+            </div>
+          </div>
+          <div class="card__actions">
+            <button class="btn btn--primary" style="flex:1">🛒 Agregar</button>
+            <button class="btn btn--ghost">❤️</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card__badge">Oferta -20%</div>
+        <img src="https://tse1.mm.bing.net/th/id/OIP.O6SJocUjmbTMlAv7fd-zRgHaEK?cb=ucfimg2ucfimg=1&rs=1&pid=ImgDetMain&o=7&rm=3" alt="Halo Infinite">
+        <div class="card__body">
+          <div class="card__platform">Xbox Series X|S</div>
+          <h3 class="card__title">Halo Infinite</h3>
+          <div class="card__rating">
+            <span class="stars">⭐⭐⭐⭐</span>
+            <span>(4.2) 1,876 reseñas</span>
+          </div>
+          <div class="card__price">
+            <div>
+              <div class="price">$960 MXN</div>
+              <div class="price--old">$1,200 MXN</div>
+            </div>
+          </div>
+          <div class="card__actions">
+            <button class="btn btn--primary" style="flex:1">🛒 Agregar</button>
+            <button class="btn btn--ghost">❤️</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card__badge">Nuevo</div>
+        <img src="https://tse3.mm.bing.net/th/id/OIP.wHIG_z9lOnRLHBTwjs05QQHaEK?cb=ucfimg2ucfimg=1&rs=1&pid=ImgDetMain&o=7&rm=3" alt="Zelda">
+        <div class="card__body">
+          <div class="card__platform">Nintendo Switch</div>
+          <h3 class="card__title">Zelda: Breath of the Wild</h3>
+          <div class="card__rating">
+            <span class="stars">⭐⭐⭐⭐⭐</span>
+            <span>(4.9) 3,542 reseñas</span>
+          </div>
+          <div class="card__price">
+            <div>
+              <div class="price">$1,400 MXN</div>
+            </div>
+          </div>
+          <div class="card__actions">
+            <button class="btn btn--primary" style="flex:1">🛒 Agregar</button>
+            <button class="btn btn--ghost">❤️</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <img src="https://th.bing.com/th/id/R.1f61de5c95100c4635fb92e7ea4f14b0?rik=WOJHcjJdddZnyQ&pid=ImgRaw&r=0" alt="GTA V">
+        <div class="card__body">
+          <div class="card__platform">PlayStation 5</div>
+          <h3 class="card__title">GTA V Premium Edition</h3>
+          <div class="card__rating">
+            <span class="stars">⭐⭐⭐⭐⭐</span>
+            <span>(4.7) 5,123 reseñas</span>
+          </div>
+          <div class="card__price">
+            <div>
+              <div class="price">$999 MXN</div>
+            </div>
+          </div>
+          <div class="card__actions">
+            <button class="btn btn--primary" style="flex:1">🛒 Agregar</button>
+            <button class="btn btn--ghost">❤️</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Carrito mejorado -->
+  <section id="carrito" class="section container">
+    <h2>🛒 Carrito de Compras</h2>
+    <div class="cart">
+      <h3>🎮 Tus productos (1 artículo)</h3>
+      <div class="cart-item">
+        <img src="https://tse4.mm.bing.net/th/id/OIP.Z52BIGCQi2mFHam42kxmpQHaEK?cb=ucfimg2ucfimg=1&rs=1&pid=ImgDetMain&o=7&rm=3" alt="Mario Odyssey">
+        <div class="cart-item__info">
+          <h4 class="cart-item__title">Super Mario Odyssey</h4>
+          <div class="cart-item__price">$1,300 MXN x1</div>
+        </div>
+        <button class="btn btn--ghost">🗑️</button>
+      </div>
+      <div class="cart-total">
+        <p>Subtotal: $1,300 MXN</p>
+        <p>Puntos que ganarás: ⭐ +130 puntos</p>
+        <p><strong>Total: $1,300 MXN</strong></p>
+        <button class="btn btn--primary">💳 Proceder al pago</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Perfil con gamificación -->
+  <section id="perfil" class="section container">
+    <h2>👤 Mi Perfil</h2>
+    <div class="profile">
+      <div class="profile__header">
+        <div class="profile__avatar">JP</div>
+        <div class="profile__info">
+          <h3>Juan Pérez</h3>
+          <p>juanperez@email.com</p>
+          <div class="profile__level">Nivel 12 - Gamer Avanzado</div>
+        </div>
+        <div class="user-points" style="font-size:1.1rem">
+          ⭐ 2,450 puntos disponibles
+        </div>
+      </div>
+
+      <div class="achievements">
+        <h4>🏆 Logros desbloqueados</h4>
+        <div class="badges">
+          <div class="badge">
+            <div class="badge__icon">🛒</div>
+            <div class="badge__title">Primera Compra</div>
+          </div>
+          <div class="badge">
+            <div class="badge__icon">⭐</div>
+            <div class="badge__title">1000 Puntos</div>
+          </div>
+          <div class="badge">
+            <div class="badge__icon">❤️</div>
+            <div class="badge__title">Fan Nintendo</div>
+          </div>
+          <div class="badge">
+            <div class="badge__icon">📝</div>
+            <div class="badge__title">Reseñador</div>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn btn--ghost">✏️ Editar perfil</button>
+      <button class="btn btn--primary">🎁 Canjear puntos</button>
+    </div>
+
+    <!-- Recomendaciones personalizadas -->
+    <div class="recommendations">
+      <h3>🎯 Recomendado para ti</h3>
+      <p>Basado en tus compras previas y juegos similares que te gustan:</p>
+      <div class="grid" style="margin-top:1rem">
+        <div class="card">
+          <img src="https://thvnext.bing.com/th/id/OIP.K5mQLcjBLd3MXAPPI8huhgHaEJ?o=7&cb=ucfimg2rm=3&ucfimg=1&rs=1&pid=ImgDetMain&o=7&rm=3" alt="Mario 3D World">
+          <div class="card__body">
+            <div class="card__platform">Nintendo Switch</div>
+            <h3 class="card__title">Super Mario 3D World</h3>
+            <div class="card__rating">
+              <span class="stars">⭐⭐⭐⭐⭐</span>
+              <span>(4.6) 1,234 reseñas</span>
+            </div>
+            <div class="card__price">
+              <div class="price">$1,200 MXN</div>
+            </div>
+            <button class="btn btn--primary" style="width:100%;margin-top:.5rem">🛒 Agregar al carrito</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer mejorado -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__content">
+        <div class="footer__section">
+          <h4>Productos</h4>
+          <a href="#">Juegos Nintendo</a>
+          <a href="#">Juegos PlayStation</a>
+          <a href="#">Juegos Xbox</a>
+          <a href="#">PC Gaming</a>
+          <a href="#">Accesorios</a>
+        </div>
+        <div class="footer__section">
+          <h4>Comunidad</h4>
+          <a href="#">Foros</a>
+          <a href="#">Reseñas</a>
+          <a href="#">Blog Gaming</a>
+          <a href="#">Discord</a>
+        </div>
+        <div class="footer__section">
+          <h4>Soporte</h4>
+          <a href="#">Centro de ayuda</a>
+          <a href="#">Política de devoluciones</a>
+          <a href="#">Envíos</a>
+          <a href="#">Contacto</a>
+        </div>
+        <div class="footer__section">
+          <h4>Cuenta</h4>
+          <a href="#">Mi perfil</a>
+          <a href="#">Mis pedidos</a>
+          <a href="#">Lista de deseos</a>
+          <a href="#">Puntos y recompensas</a>
+        </div>
+      </div>
+      <div style="text-align:center;padding-top:2rem;border-top:1px solid var(--border)">
+        <p>© 2025 Game Paradise • El mejor marketplace gaming de México 🎮</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Funcionalidad de búsqueda
+    document.getElementById('searchInput').addEventListener('input', function(e) {
+      console.log('Buscando:', e.target.value);
+    });
+
+    // Filtros de productos
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        document.querySelector('.filter-btn.active')?.classList.remove('active');
+        this.classList.add('active');
+      });
+    });
+
+    // Funcionalidad de agregar al carrito
+    document.querySelectorAll('.btn--primary').forEach(btn => {
+      if (btn.textContent.includes('Agregar')) {
+        btn.addEventListener('click', function() {
+          this.textContent = '✓ Agregado';
+          this.style.background = 'var(--success)';
+          setTimeout(() => {
+            this.textContent = '🛒 Agregar';
+            this.style.background = 'var(--primary)';
+          }, 2000);
+        });
+      }
+    });
+  </script>
+</body>
+</html>
