@@ -7,12 +7,16 @@ const port = 3000;
 
 //Middleware para parsear JSON en las solicitudes
 app.use(express.json());
-//Conectar a MongoDB
-mongoose.connect('mongodb://localhost:27017/gamecommerce').then(() => console.log('Se conecto a la base de datos'))
-.catch(err => console.error('Error de conexion a mongodb', err));
+// Conectar a MongoDB y luego iniciar el servidor
+mongoose.connect('mongodb://localhost:27017/gamecommerce')
+  .then(() => {
+    console.log('Se conectó a la base de datos ✅');
 
-//meter esa
-//Iniciamos con el servidor
-app.listen(port, () => {
-  console.log(`🚀 Servidor Express escuchando en http://localhost:${port}`);
-});
+    // Ahora que la DB está conectada, iniciamos el servidor
+    app.listen(port, () => {
+      console.log(`🚀 Servidor Express escuchando en http://localhost:${port}`);
+    });
+  })
+  .catch(err => {
+    console.error('❌ Error de conexión a MongoDB:', err);
+  });
